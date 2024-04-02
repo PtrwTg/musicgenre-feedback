@@ -6,22 +6,43 @@ const FeedbackForm = ({ onSubmit }) => {
   const [prediction, setPrediction] = useState('');
   const [accuracy, setAccuracy] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    onSubmit({ songName, songFile, prediction, accuracy });
-    setSongName('');
-    setSongFile(null);
-    setPrediction('');
-    setAccuracy('');
+
+    const formData = new FormData();
+    formData.append('songName', songName);
+    formData.append('songFile', songFile);
+    formData.append('prediction', prediction);
+    formData.append('accuracy', accuracy);
+
+    try {
+      const response = await fetch('https://feedback-backendapi.vercel.app/api/feedback', {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (response.ok) {
+        onSubmit();
+        setSongName('');
+        setSongFile(null);
+        setPrediction('');
+        setAccuracy('');
+      } else {
+        console.error('Error submitting feedback:', response.statusText);
+      }
+    } catch (error) {
+      console.error('Error submitting feedback:', error);
+    }
   };
 
   return (
     <form onSubmit={handleSubmit} className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
       <div className="mb-4">
-        <label className="block text-gray-700 font-bold mb-2" htmlFor="songName">
+        <label htmlFor="song-name" className="block text-gray-700 font-bold mb-2">
           Song Name
         </label>
         <input
+          id="song-name"
           className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
           type="text"
           placeholder="Song Name"
@@ -31,10 +52,11 @@ const FeedbackForm = ({ onSubmit }) => {
         />
       </div>
       <div className="mb-4">
-        <label className="block text-gray-700 font-bold mb-2" htmlFor="songFile">
+        <label htmlFor="song-file" className="block text-gray-700 font-bold mb-2">
           Song File (.wav)
         </label>
         <input
+          id="song-file"
           className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
           type="file"
           accept=".wav"
@@ -43,10 +65,11 @@ const FeedbackForm = ({ onSubmit }) => {
         />
       </div>
       <div className="mb-4">
-        <label className="block text-gray-700 font-bold mb-2" htmlFor="prediction">
+        <label htmlFor="prediction-select" className="block text-gray-700 font-bold mb-2">
           Prediction
         </label>
         <select
+          id="prediction-select"
           className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
           value={prediction}
           onChange={(e) => setPrediction(e.target.value)}
@@ -60,10 +83,11 @@ const FeedbackForm = ({ onSubmit }) => {
         </select>
       </div>
       <div className="mb-4">
-        <label className="block text-gray-700 font-bold mb-2" htmlFor="accuracy">
+        <label htmlFor="accuracy-select" className="block text-gray-700 font-bold mb-2">
           Accuracy
         </label>
         <select
+          id="accuracy-select"
           className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
           value={accuracy}
           onChange={(e) => setAccuracy(e.target.value)}
