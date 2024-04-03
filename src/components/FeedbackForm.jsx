@@ -16,7 +16,7 @@ const FeedbackForm = ({ onSubmit }) => {
     formData.append('accuracy', accuracy);
 
     try {
-      const response = await fetch('https://feedback-backendapi.vercel.app/api/feedback', {
+      const response = await fetch('https://localhost:5000/api/feedback', {
         method: 'POST',
         body: formData,
       });
