@@ -19,7 +19,7 @@ const FeedbackList = () => {
   const totalPredicted = feedbacks.length;
   const totalCorrect = feedbacks.filter((feedback) => feedback.accuracy === 'Correct').length;
   const totalIncorrect = feedbacks.filter((feedback) => feedback.accuracy === 'Incorrect').length;
-  
+
   // Calculate accuracy percentage
   const accuracyPercentage = totalPredicted > 0 ? ((totalCorrect / totalPredicted) * 100).toFixed(2) : 0;
 

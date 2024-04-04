@@ -24,6 +24,9 @@ const FeedbackForm = ({ onSubmit }) => {
         setSongName('');
         setPrediction('');
         setAccuracy('');
+        
+        // Reload the page after successful submission
+        window.location.reload();
       } else {
         console.error('Error submitting feedback:', response.statusText);
       }
