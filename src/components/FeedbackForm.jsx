@@ -2,29 +2,26 @@ import { useState } from 'react';
 
 const FeedbackForm = ({ onSubmit }) => {
   const [songName, setSongName] = useState('');
-  const [songFile, setSongFile] = useState(null);
   const [prediction, setPrediction] = useState('');
   const [accuracy, setAccuracy] = useState('');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    const formData = new FormData();
-    formData.append('songName', songName);
-    formData.append('songFile', songFile);
-    formData.append('prediction', prediction);
-    formData.append('accuracy', accuracy);
-
     try {
       const response = await fetch('http://localhost:5000/api/feedback', {
         method: 'POST',
-        body: formData,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          songName,
+          prediction,
+          accuracy,
+        }),
       });
-
       if (response.ok) {
         onSubmit();
         setSongName('');
-        setSongFile(null);
         setPrediction('');
         setAccuracy('');
       } else {
@@ -48,19 +45,6 @@ const FeedbackForm = ({ onSubmit }) => {
           placeholder="Song Name"
           value={songName}
           onChange={(e) => setSongName(e.target.value)}
-          required
-        />
-      </div>
-      <div className="mb-4">
-        <label htmlFor="song-file" className="block text-gray-700 font-bold mb-2">
-          Song File (.wav)
-        </label>
-        <input
-          id="song-file"
-          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-          type="file"
-          accept=".wav"
-          onChange={(e) => setSongFile(e.target.files[0])}
           required
         />
       </div>

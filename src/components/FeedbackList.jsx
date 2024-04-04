@@ -13,28 +13,25 @@ const FeedbackList = () => {
         console.error('Error fetching feedbacks:', error);
       }
     };
-
     fetchFeedbacks();
   }, []);
 
   const totalPredicted = feedbacks.length;
   const totalCorrect = feedbacks.filter((feedback) => feedback.accuracy === 'Correct').length;
   const totalIncorrect = feedbacks.filter((feedback) => feedback.accuracy === 'Incorrect').length;
+  
+  // Calculate accuracy percentage
+  const accuracyPercentage = totalPredicted > 0 ? ((totalCorrect / totalPredicted) * 100).toFixed(2) : 0;
 
   return (
     <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-xl font-bold">Feedback List</h2>
         <div className="text-gray-600">
-          <span className="mr-4">
-            Predicted: {totalPredicted}
-          </span>
-          <span className="mr-4">
-            Correct: {totalCorrect}
-          </span>
-          <span>
-            Incorrect: {totalIncorrect}
-          </span>
+          <span className="mr-4">Predicted: {totalPredicted}</span>
+          <span className="mr-4">Correct: {totalCorrect}</span>
+          <span className="mr-4">Incorrect: {totalIncorrect}</span>
+          <span>Accuracy: {accuracyPercentage}%</span>
         </div>
       </div>
       <ul>
@@ -42,7 +39,6 @@ const FeedbackList = () => {
           <li key={index} className="mb-4">
             <div className="bg-gray-100 p-4 rounded">
               <h3 className="text-lg font-bold">{feedback.songName}</h3>
-              <audio className="my-2" controls src={feedback.songUrl} />
               <p className="text-gray-700">
                 <span className="font-bold">Prediction:</span> {feedback.prediction}
               </p>
